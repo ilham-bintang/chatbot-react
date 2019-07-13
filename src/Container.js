@@ -24,15 +24,27 @@ class Container extends Component {
         var data = this.state.datas
         data.push({"text": this.state.text, "position" : "right"})
         
+        var options = {
+            "headers": {
+                "content-type": "application/json",
+                "authorization": "Bearer JmFQsjy2uyOeWDR5TrfggeCn95ZC8pJ2"
+            }
+        };
 
         let url = `http://localhost:5000/parse?q=${this.state.text}`
         
         this.setState({text : "", datas:data})
 
-        axios.get(url)
+        axios.post("https://api.chatbot.com/query", data = {
+            query: this.state.text,
+            sessionId: '1034021451',
+            storyId: '5d29922df7cbcd46ede40b33'
+          }, options = options)
         .then(res => {
+            // console.log()
             var data = this.state.datas
-            data.push({"text": res.text, "position" : "left"})
+            data.push({"text": res.data.result.fulfillment[0].title, "position" : "left"})
+            this.setState({text : "", datas:data})
         })
     }
 
